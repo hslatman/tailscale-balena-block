@@ -1,0 +1,24 @@
+name: tailscale
+description: Run a Tailscale node on a Balena device
+version: 0.0.1
+type: sw.block
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/hslatman/tailscale-balena-block'
+  logo:
+    type: blob.asset
+    data:
+      url: https://raw.githubusercontent.com/hslatman/tailscale-balena-block/main/logo.png
+data:
+  applicationEnvironmentVariables:
+    - TAILSCALE_KEY: <YOUR_TAILSCALE_KEY>
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    #- raspberry-pi
+    #- raspberry-pi2
+    - raspberrypi3
+    #- raspberrypi4-64
+    #- fincm3
+    #- intel-nuc
