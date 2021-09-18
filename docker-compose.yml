@@ -4,9 +4,9 @@ volumes:
   tailscale-state: {}
 
 services:
-  wifi-connect:
+  tailscale:
     #image: hslatman/tailscale-block:rpi
-    image: hslatman/tailscale-block:rpi
+    image: hslatman/tailscale-balena-block
     restart: always
     network_mode: host
     #privileged: true
