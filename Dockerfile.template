@@ -1,0 +1,41 @@
+ARG BALENA_MACHINE_NAME_ARG=%%BALENA_MACHINE_NAME%%
+
+#FROM balenalib/$BALENA_MACHINE_NAME_ARG-debian-golang:build as builder
+
+# Change the BALENA_MACHINE_NAME and BALENA_OS_VERSION to values appropriate for your system
+#ENV BALENA_MACHINE_NAME %%BALENA_MACHINE_NAME%%
+#ENV BALENA_OS_VERSION 2.60.1+rev1.prod
+
+#RUN install_packages curl build-essential libelf-dev libssl-dev pkg-config git flex bison bc python kmod
+
+#WORKDIR /usr/src
+
+#RUN git clone https://git.zx2c4.com/wireguard-linux-compat && \  
+#    git clone https://git.zx2c4.com/wireguard-tools
+
+#RUN curl -L -o headers.tar.gz $(echo "https://files.balena-cloud.com/images/$BALENA_MACHINE_NAME/$BALENA_OS_VERSION/kernel_modules_headers.tar.gz" | sed -e 's/+/%2B/') && \  
+#    tar -xf headers.tar.gz
+
+#RUN make -C kernel_modules_headers -j$(nproc) modules_prepare
+
+#RUN make -C kernel_modules_headers M=$(pwd)/wireguard-linux-compat/src -j$(nproc)  
+#RUN make -C $(pwd)/wireguard-tools/src -j$(nproc) && \  
+#    mkdir -p $(pwd)/tools && \
+#    make -C $(pwd)/wireguard-tools/src DESTDIR=$(pwd)/tools install
+
+FROM balenalib/$BALENA_MACHINE_NAME_ARG-debian:run
+
+RUN curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.gpg | sudo apt-key add -
+RUN curl -fsSL https://pkgs.tailscale.com/stable/raspbian/buster.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+
+#RUN install_packages kmod iptables tailscale
+RUN install_packages iptables tailscale
+
+#WORKDIR /wireguard
+#COPY --from=builder /usr/src/wireguard-linux-compat/src/wireguard.ko .  
+#COPY --from=builder /usr/src/tools /
+
+COPY init.sh /init.sh
+RUN chmod +x /init.sh
+
+ENTRYPOINT ["/init.sh"]
