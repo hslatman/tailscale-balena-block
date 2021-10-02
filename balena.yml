@@ -16,9 +16,8 @@ data:
     - TAILSCALE_KEY: <YOUR_TAILSCALE_KEY>
   defaultDeviceType: raspberrypi3
   supportedDeviceTypes:
-    #- raspberry-pi
-    #- raspberry-pi2
+    - raspberry-pi2
     - raspberrypi3
-    #- raspberrypi4-64
-    #- fincm3
-    #- intel-nuc
+    - raspberrypi4-64
+    - fincm3
+    - intel-nuc

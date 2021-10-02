@@ -10,7 +10,18 @@ Use this as standalone with the button below:
 
 Or add the following service to your docker-compose.yml:
 
-TODO: add Docker image for deployment
+```dockerfile  
+volumes:
+  tailscale-state: {}
+
+services:
+  tailscale:
+    image: ghcr.io/hslatman/tailscale-balena-block
+    restart: always
+    network_mode: host
+    volumes:
+      - tailscale-state:/tailscale
+```
 
 You'll need to provide a valid `Auth Key` to the `tailscale` service in the `TAILSCALE_KEY` variable.
 An `Auth Key` can be created in the [Tailscale Dashboard](https://login.tailscale.com/admin/settings/authkeys).
@@ -22,17 +33,16 @@ It uses [WireGuard](https://www.wireguard.com/) to tunnel traffic between hosts.
 
 ## (Potential) Improvements
 
-* Provide Docker image for the block
-* Be smarter when TAILSCALE_KEY is not yet set in Balena
-* Provide additional configuration options
-    * subnet routing
-    * ...
-* Expose some tags in Tailscale?
-* Expose some tags in Balena?
-* Support kernel networking (instead of just userspace; also see [hslatman/tailscale-balena-rpi](https://github.com/hslatman/tailscale-balena-rpi))
-* Some easy way for checking that Tailscale tunnel works?
-* A way to refresh/reauth tailscaled state on command?
-* ...
+[x] Provide Docker image for the block
+[ ] Be smarter when TAILSCALE_KEY is not yet set in Balena
+[ ] Provide additional configuration options
+    [ ] subnet routing
+    [ ] ...
+[ ] Expose some tags in Tailscale?
+[ ] Expose some tags in Balena?
+[ ] Support kernel networking (instead of just userspace; also see [hslatman/tailscale-balena-rpi](https://github.com/hslatman/tailscale-balena-rpi))
+[ ] Some easy way for checking that Tailscale tunnel works?
+[ ] A way to refresh/reauth tailscaled state on command?
 
 ## Legal
 
