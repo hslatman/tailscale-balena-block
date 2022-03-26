@@ -1,4 +1,4 @@
-name: Build and publish container
+name: Build and publish container to GitHub
 
 on:
   push:
@@ -6,18 +6,18 @@ on:
   workflow_dispatch:
     inputs:
       reason:
-        description: 'Why ?'
+        description: "Why ?"
         required: false
-        default: ''
+        default: ""
 
 jobs:
-  ghr_push:
+  ghcr:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

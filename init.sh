@@ -41,29 +41,39 @@ fi
 # fi
 
 tailscaled --tun=userspace-networking -state=/tailscale/tailscaled.state &
-sleep 5
-tailscale up -authkey "${TAILSCALE_KEY}" -hostname "${TAILSCALE_HOSTNAME}" $@
-IP_ADDRESS=$(tailscale ip -4)
+while ! tailscale status --peers=false >/dev/null 2>&1; do sleep 1; done
 
-DEVICE_ID=$(curl -X GET "https://api.balena-cloud.com/v5/device?\$filter=uuid%20eq%20'${BALENA_DEVICE_UUID}'&\$select=id" -H "Content-Type: application/json" -H "Authorization: Bearer ${BALENA_API_KEY}" -s | jq -r '.d | .[] | .id')
+TAILSCALE_TAGS="${TAILSCALE_TAGS}${TAILSCALE_TAGS+,}balena_fleet_name:${BALENA_APP_NAME},balena_device_uuid:${BALENA_DEVICE_UUID},balena_device_type:${BALENA_DEVICE_TYPE},balena_os_version:${BALENA_HOST_OS_VERSION}"
 
-curl -X POST \
-"https://api.balena-cloud.com/v6/device_tag?\$filter=device/uuid%20eq%20'${BALENA_DEVICE_UUID}'" \
--H "Content-Type: application/json" \
--H "Authorization: Bearer ${BALENA_API_KEY}" \
---data '{
-    "device": "'${DEVICE_ID}'",
-    "tag_key": "TAILSCALE_IP",
-    "value": "'${IP_ADDRESS}'"
-}' \
--s
+tailscale up \
+	--authkey "${TAILSCALE_KEY}" \
+	--hostname "${TAILSCALE_HOSTNAME}" \
+	--advertise-tags "${TAILSCALE_TAGS}" \
+	$@
 
-curl -X PATCH \
-"https://api.balena-cloud.com/v6/device_tag?\$filter=device/uuid%20eq%20'${BALENA_DEVICE_UUID}'" \
--H "Content-Type: application/json" \
--H "Authorization: Bearer ${BALENA_API_KEY}" \
---data '{
-    "tag_key": "TAILSCALE_IP",
-    "value": "'${IP_ADDRESS}'"
-}'
+if [ "${TAILSCALE_IP}" = true ]; then
+    IP_ADDRESS=$(tailscale ip -4)
+    DEVICE_ID=$(curl -X GET "https://api.balena-cloud.com/v5/device?\$filter=uuid%20eq%20'${BALENA_DEVICE_UUID}'&\$select=id" -H "Content-Type: application/json" -H "Authorization: Bearer ${BALENA_API_KEY}" -s | jq -r '.d | .[] | .id')
+
+    curl -X POST \
+    "https://api.balena-cloud.com/v6/device_tag?\$filter=device/uuid%20eq%20'${BALENA_DEVICE_UUID}'" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${BALENA_API_KEY}" \
+    --data '{
+        "device": "'${DEVICE_ID}'",
+        "tag_key": "TAILSCALE_IP",
+        "value": "'${IP_ADDRESS}'"
+    }' \
+    -s
+
+    curl -X PATCH \
+    "https://api.balena-cloud.com/v6/device_tag?\$filter=device/uuid%20eq%20'${BALENA_DEVICE_UUID}'" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${BALENA_API_KEY}" \
+    --data '{
+        "tag_key": "TAILSCALE_IP",
+        "value": "'${IP_ADDRESS}'"
+    }'
+fi
+
 fg

@@ -1,0 +1,32 @@
+name: Build and publish container to balena
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+    branches:
+      - master
+      - main
+
+jobs:
+  balena:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+      matrix:
+        fleet:
+          [
+            hslatman/tailscale-rpi,
+            hslatman/tailscale-armv7hf,
+            hslatman/tailscale-aarch64,
+            hslatman/tailscale-amd64,
+          ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: balena-io/deploy-to-balena-action@v0.9.0
+        with:
+          balena_token: ${{ secrets.BALENA_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          environment: balena-cloud.com
+          fleet: ${{ matrix.fleet }}
+          versionbot: true

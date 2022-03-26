@@ -6,7 +6,7 @@ assets:
   repository:
     type: blob.asset
     data:
-      url: 'https://github.com/hslatman/tailscale-balena-block'
+      url: "https://github.com/hslatman/tailscale-balena-block"
   logo:
     type: blob.asset
     data:
@@ -14,6 +14,7 @@ assets:
 data:
   applicationEnvironmentVariables:
     - TAILSCALE_KEY: <YOUR_TAILSCALE_KEY>
+    - TAILSCALE_IP: false
   defaultDeviceType: raspberrypi3
   supportedDeviceTypes:
     - raspberry-pi2
