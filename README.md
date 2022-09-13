@@ -48,6 +48,7 @@ It uses [WireGuard](https://www.wireguard.com/) to tunnel traffic between hosts.
 - [ ] Support kernel networking (instead of just userspace; also see [hslatman/tailscale-balena-rpi](https://github.com/hslatman/tailscale-balena-rpi))
 - [ ] Some easy way for checking that Tailscale tunnel works?
 - [ ] A way to refresh/reauth tailscaled state on command?
+- [x] Deploy to multi-arch fleets with GitHub actions
 
 ## Legal
 
