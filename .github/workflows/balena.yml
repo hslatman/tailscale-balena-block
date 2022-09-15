@@ -17,9 +17,9 @@ jobs:
       matrix:
         fleet:
           [
-            # hslatman/tailscale-rpi,
-            # hslatman/tailscale-armv7hf,
-            #herman/tailscale-aarch64,
+            hslatman/tailscale-rpi,
+            hslatman/tailscale-armv7hf,
+            herman/tailscale-aarch64,
             herman/tailscale-amd64,
           ]
 
