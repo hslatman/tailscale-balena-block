@@ -31,4 +31,4 @@ jobs:
           #github_token: ${{ secrets.GITHUB_TOKEN }}
           environment: balena-cloud.com
           fleet: ${{ matrix.fleet }}
-          versionbot: true
+          #versionbot: true
