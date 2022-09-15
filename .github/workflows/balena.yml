@@ -6,6 +6,12 @@ on:
     branches:
       - master
       - main
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why ?"
+        required: false
+        default: ""
 
 jobs:
   balena:
