@@ -17,7 +17,7 @@ jobs:
           [
             # hslatman/tailscale-rpi,
             # hslatman/tailscale-armv7hf,
-            hslatman/tailscale-aarch64,
+            herman/tailscale-aarch64,
             # hslatman/tailscale-amd64,
           ]
 
