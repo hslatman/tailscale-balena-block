@@ -36,14 +36,8 @@ if [ -z "${TAILSCALE_HOSTNAME}" ]; then
     export TAILSCALE_HOSTNAME=${BALENA_DEVICE_NAME_AT_INIT}
 fi
 
-# if [ -z "${TAILSCALE_TAGS}" ]; then
-#     export TAILSCALE_TAGS="tag:docker,tag:balena"
-# fi
-
 tailscaled --tun=userspace-networking -state=/tailscale/tailscaled.state &
 while ! tailscale status --peers=false >/dev/null 2>&1; do sleep 1; done
-
-TAILSCALE_TAGS="${TAILSCALE_TAGS}${TAILSCALE_TAGS+,}balena_fleet_name:${BALENA_APP_NAME},balena_device_uuid:${BALENA_DEVICE_UUID},balena_device_type:${BALENA_DEVICE_TYPE},balena_os_version:${BALENA_HOST_OS_VERSION}"
 
 tailscale up \
 	--authkey "${TAILSCALE_KEY}" \
