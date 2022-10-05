@@ -6,7 +6,11 @@ on:
     branches:
       - master
       - main
-
+  push:
+    tags:
+      - "v*.*.*"
+    #branches: [main]
+    
 jobs:
   balena:
     runs-on: ubuntu-latest
